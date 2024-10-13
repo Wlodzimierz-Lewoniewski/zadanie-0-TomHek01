@@ -33,7 +33,7 @@ def main():
     print("\nWyniki dla zapytań:")
     for wynik in wyniki:
         if wynik:
-            print(" ".join(map(str, wynik)))
+            print(f"[{', '.join(map(str, wynik))}]")
         else:
             print("Brak wyników")
 
