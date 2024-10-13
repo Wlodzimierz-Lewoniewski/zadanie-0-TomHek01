@@ -1,3 +1,5 @@
+import re
+
 def podaj_dokumenty_i_pytania():
     dok = int(input("Podaj liczbę dokumentów: "))
     dokumenty = [input(f"Dokument {i + 1}: ") for i in range(dok)]
@@ -8,7 +10,8 @@ def podaj_dokumenty_i_pytania():
     return dokumenty, pytania
 
 def licz(slowo, dokument):
-    return dokument.lower().split().count(slowo)
+    slowa = re.findall(r'\b\w+\b', dokument.lower())
+    return slowa.count(slowo.lower())
 
 def spr(dokumenty, pytania):
     wyniki = []
