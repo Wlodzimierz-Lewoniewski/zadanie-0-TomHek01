@@ -1,54 +1,41 @@
+def podaj_dokumenty_i_pytania():
+    dok = int(input("Podaj liczbę dokumentów: "))
+    dokumenty = [input(f"Dokument {i + 1}: ") for i in range(dok)]
 
-def wczytaj_dokumenty(ile_dokumentow):
-    dokumenty = []
-    for i in range(ile_dokumentow):
-        dokument = input(f"Podaj dokument {i + 1}: ")
-        dokumenty.append(dokument)
-    return dokumenty
+    pyt = int(input("Podaj liczbę pytań: "))
+    pytania = [input(f"Pytanie {j + 1}: ").strip().lower() for j in range(pyt)]
 
-def wczytaj_zapytania(ile_zapytan):
-    zapytania = []
-    for i in range(ile_zapytan):
-        zapytanie = input(f"Podaj zapytanie {i + 1}: ")
-        zapytania.append(zapytanie)
-    return zapytania
+    return dokumenty, pytania
 
-def liczba_wystapien_slowa(dokument, slowo):
-    return dokument.lower().split().count(slowo.lower())
+def licz(slowo, dokument):
+    return dokument.lower().split().count(slowo)
 
-def przetwarzaj_zapytania(dokumenty, zapytania):
+def spr(dokumenty, pytania):
     wyniki = []
-    
-    for zapytanie in zapytania:
-        lista_wynikow = []
 
-        for i, dokument in enumerate(dokumenty):
-            liczba_wystapien = liczba_wystapien_slowa(dokument, zapytanie)
+    for pytanie in pytania:
+        wystapienia = [(indeks, licz(pytanie, dokument)) for indeks, dokument in enumerate(dokumenty)]
 
-            if liczba_wystapien > 0:
-                lista_wynikow.append((i + 1, liczba_wystapien))  
+        filtr = [element for element in wystapienia if element[1] > 0]
 
-        lista_wynikow.sort(key=lambda x: (-x[1], x[0]))
+        posortowane = sorted(filtr, key=lambda x: (-x[1], x[0]))
 
-        wyniki.append([doc[0] for doc in lista_wynikow])
+        indeksy = [indeks for indeks, _ in posortowane]
+
+        wyniki.append(indeksy)
 
     return wyniki
 
-# Część Główna
 def main():
-    ile_dokumentow = int(input("Ile dokumentów chcesz dodać? "))
+    dokumenty, pytania = podaj_dokumenty_i_pytania()
+    wyniki = spr(dokumenty, pytania)
 
-    dokumenty = wczytaj_dokumenty(ile_dokumentow)
-
-    ile_zapytan = int(input("Ile zapytań chcesz przetworzyć? "))
-
-    zapytania = wczytaj_zapytania(ile_zapytan)
-
-    wyniki = przetwarzaj_zapytania(dokumenty, zapytania)
-
+    print("\nWyniki dla zapytań:")
     for wynik in wyniki:
-        print(" ".join(map(str, wynik)) if wynik else "Brak wyników")
+        if wynik:
+            print(" ".join(map(str, wynik)))
+        else:
+            print("Brak wyników")
 
-# Uruchom program
 if __name__ == '__main__':
     main()
